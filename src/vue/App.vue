@@ -179,11 +179,17 @@ const CryptoCipherTools = defineAsyncComponent(() => import('./components/Crypto
 const UtilityBasicTools = defineAsyncComponent(() => import('./components/UtilityBasicTools.vue'));
 const UtilityAdvancedTools = defineAsyncComponent(() => import('./components/UtilityAdvancedTools.vue'));
 
+const publicAssetBase = import.meta.env.BASE_URL || '/';
+
+function getPublicAssetUrl(relativePath) {
+  return `${publicAssetBase}${String(relativePath || '').replace(/^\//, '')}`;
+}
+
 const HEADER_ICONS = {
-  search: '/images/icons/header-search.svg',
-  close: '/images/icons/header-close.svg',
-  sun: '/images/icons/header-sun.svg',
-  moon: '/images/icons/header-moon.svg',
+  search: getPublicAssetUrl('images/icons/header-search.svg'),
+  close: getPublicAssetUrl('images/icons/header-close.svg'),
+  sun: getPublicAssetUrl('images/icons/header-sun.svg'),
+  moon: getPublicAssetUrl('images/icons/header-moon.svg'),
 };
 
 const currentPage = ref('home');
@@ -220,15 +226,15 @@ let globalLoadingHideTimer = null;
 const HOMEPAGE_CATEGORY_ORDER = ['编解码', '哈希算法', '加解密', '数据生成', '数据转换', '格式化', '数据分析', '图像'];
 
 const CATEGORY_ICONS = {
-  编解码: '/images/icons/menu-binary.svg',
-  哈希算法: '/images/icons/menu-fingerprint.svg',
-  加解密: '/images/icons/menu-shield.svg',
-  数据生成: '/images/icons/menu-sparkles.svg',
-  数据转换: '/images/icons/menu-arrow-left-right.svg',
-  格式化: '/images/icons/menu-code-xml.svg',
-  数据分析: '/images/icons/menu-search.svg',
-  图像: '/images/icons/menu-image.svg',
-  其他: '/images/icons/menu-code-xml.svg',
+  编解码: getPublicAssetUrl('images/icons/menu-binary.svg'),
+  哈希算法: getPublicAssetUrl('images/icons/menu-fingerprint.svg'),
+  加解密: getPublicAssetUrl('images/icons/menu-shield.svg'),
+  数据生成: getPublicAssetUrl('images/icons/menu-sparkles.svg'),
+  数据转换: getPublicAssetUrl('images/icons/menu-arrow-left-right.svg'),
+  格式化: getPublicAssetUrl('images/icons/menu-code-xml.svg'),
+  数据分析: getPublicAssetUrl('images/icons/menu-search.svg'),
+  图像: getPublicAssetUrl('images/icons/menu-image.svg'),
+  其他: getPublicAssetUrl('images/icons/menu-code-xml.svg'),
 };
 
 const TOOL_COMPONENTS = {
