@@ -173,6 +173,7 @@ import { ChevronLeft, Loader2, Menu, X } from 'lucide-vue-next';
 import { TOOLS } from '../shared/tool-data.js';
 
 const EncodingTools = defineAsyncComponent(() => import('./components/EncodingTools.vue'));
+const EncodingUniversal = defineAsyncComponent(() => import('./components/EncodingUniversal.vue'));
 const GeneratorTools = defineAsyncComponent(() => import('./components/GeneratorTools.vue'));
 const CryptoDigestTools = defineAsyncComponent(() => import('./components/CryptoDigestTools.vue'));
 const CryptoCipherTools = defineAsyncComponent(() => import('./components/CryptoCipherTools.vue'));
@@ -246,6 +247,7 @@ const TOOL_COMPONENTS = {
   sha384: { component: CryptoDigestTools, props: { toolId: 'sha', initialAlgorithm: 'sha384' } },
   sha512: { component: CryptoDigestTools, props: { toolId: 'sha', initialAlgorithm: 'sha512' } },
   sm3: { component: CryptoDigestTools, props: { toolId: 'sm3' } },
+  'universal-encoding': { component: EncodingUniversal, props: { toolId: 'universal-encoding' } },
   base: { component: EncodingTools, props: { toolId: 'base' } },
   base64: { component: EncodingTools, props: { toolId: 'base', initialBaseVariant: 'base64' } },
   'url-encode': { component: EncodingTools, props: { toolId: 'url-encode' } },

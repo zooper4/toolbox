@@ -39,7 +39,8 @@ function encode() {
   }
 }
 function decode() {
-  const value = String(input.value || '').trim()
+  const rawValue = String(input.value || '')
+  const value = rawValue.replace(/\s+/g, '')
   if (!value) {
     lastR.value = '请输入内容'
     return
@@ -49,7 +50,7 @@ function decode() {
     return
   }
   try {
-    lastR.value = hexDecode(value)
+    lastR.value = hexDecode(rawValue)
   } catch (error) {
     lastR.value = `输入不合法：${error?.message || 'Hex 解码失败'}`
   }

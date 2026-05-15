@@ -52,7 +52,7 @@
           <Check v-if="jwtJsonCopyState === 'success'" :size="14" stroke-width="2" />
           <Copy v-else :size="14" stroke-width="2" />
         </button>
-        <textarea v-model="jwtJsonInput" class="form-input jwt-structure-textarea" placeholder='{"header":{"alg":"none","typ":"JWT"},"payload":{"sub":"1234567890"},"signature":""}'></textarea>
+        <textarea v-model="jwtJsonInput" class="form-input jwt-structure-textarea" placeholder='{"header":{"alg":"none","typ":"JWT"},"payload":{"sub":"1234567890"},"signature":""}' @input="handleJwtJsonInput"></textarea>
       </div>
     </div>
 
@@ -74,14 +74,28 @@
           <Check v-if="jwtTokenCopyState === 'success'" :size="14" stroke-width="2" />
           <Copy v-else :size="14" stroke-width="2" />
         </button>
-        <textarea v-model="jwtTokenInput" class="form-input jwt-token-textarea" placeholder="粘贴或编辑 JWT Token..."></textarea>
+        <textarea v-model="jwtTokenInput" class="form-input jwt-token-textarea" placeholder="粘贴或编辑 JWT Token..." @input="handleJwtTokenInput"></textarea>
       </div>
     </div>
   </div>
 
-  <div v-else-if="toolId === 'char-escape' || toolId === 'html-entity'">
-    <ToolPageTitle title="字符转义" />
-    <p class="mb-4 text-gray-500">将特殊字符转义为安全格式</p>
+  <div v-else-if="toolId === 'char-escape'">
+    <ToolPageTitle title="特殊字符转义" />
+    <p class="mb-4 text-gray-500">面向特殊字符转义与反转义，适合处理引号、反斜杠、换行等字符。</p>
+    <div class="mb-4">
+      <label class="block mb-1">输入</label>
+      <textarea v-model="escapeInput" class="form-input form-input-lg" placeholder="待处理字符串内容..."></textarea>
+    </div>
+    <div class="btn-group mb-4">
+      <button class="btn btn-primary" @click="runEscape(true)">转义</button>
+      <button class="btn btn-secondary" @click="runEscape(false)">反转义</button>
+    </div>
+    <ResultBox label="输出" :value="escapeOutput" lg />
+  </div>
+
+  <div v-else-if="toolId === 'html-entity'">
+    <ToolPageTitle title="HTML 实体编解码" />
+    <p class="mb-4 text-gray-500">将 HTML 特殊字符转换为实体，或将实体还原为原始文本。</p>
     <div class="mb-4">
       <label class="block mb-1">输入</label>
       <textarea v-model="escapeInput" class="form-input form-input-lg" placeholder="粘贴文本..."></textarea>
@@ -125,7 +139,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import { Check, Copy } from 'lucide-vue-next'
-import { asciiToBin, base32Decode, base32Encode, base58Decode, base58Encode, base64Decode, base64Encode, base64UrlDecode, base64UrlEncode, binToAscii, htmlDecode, htmlEncode, jwtDecode, jwtEncode, unicodeDecode, unicodeEncode } from '../../utils/encoding-tools.js'
+import { asciiToBin, base32Decode, base32Encode, base58Decode, base58Encode, base64Decode, base64Encode, base64UrlDecode, base64UrlEncode, binToAscii, htmlDecode, htmlEncode, jsonStringEscape, jsonStringUnescape, jwtDecode, jwtEncode, unicodeDecode, unicodeEncode } from '../../utils/encoding-tools.js'
 import EncodingUrl from './EncodingUrl.vue'
 import EncodingHex from './EncodingHex.vue'
 import ResultBox from './shared/ResultBox.vue'
@@ -173,8 +187,6 @@ watch(baseVariant, () => {
 
 // 修改输入时清空对应输出，避免展示过时结果
 useClearOnInput([baseInput, base64Mode], () => { baseOutput.value = '' })
-useClearOnInput([jwtJsonInput], () => { jwtTokenInput.value = '' })
-useClearOnInput([jwtTokenInput], () => { jwtJsonInput.value = '' })
 useClearOnInput([escapeInput], () => { escapeOutput.value = '' })
 useClearOnInput([unicodeInput], () => { unicodeOutput.value = '' })
 useClearOnInput([asciiInput], () => { asciiOutput.value = '' })
@@ -236,6 +248,14 @@ function decodeJwt() {
   }
 }
 
+function handleJwtJsonInput() {
+  jwtTokenInput.value = ''
+}
+
+function handleJwtTokenInput() {
+  jwtJsonInput.value = ''
+}
+
 function runEscape(encode) {
   const value = String(escapeInput.value || '')
   if (!value.trim()) {
@@ -243,6 +263,15 @@ function runEscape(encode) {
     return
   }
   try {
+    if (props.toolId === 'char-escape') {
+      const result = encode ? jsonStringEscape(value) : jsonStringUnescape(value)
+      if (!encode && typeof result === 'string' && result.startsWith('错误：')) {
+        escapeOutput.value = `输入不合法：${result.replace(/^错误：/, '')}`
+        return
+      }
+      escapeOutput.value = result
+      return
+    }
     escapeOutput.value = encode ? htmlEncode(value) : htmlDecode(value)
   } catch (error) {
     escapeOutput.value = `输入不合法：${error?.message || '字符转义失败'}`

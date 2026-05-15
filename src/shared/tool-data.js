@@ -1,13 +1,8 @@
 // 共享工具元数据，供首页、搜索和工具注册复用。
 export const TOOLS = [
-  ['base','BAS','Base 编解码','在 Base64 / Base32 / Base58 之间切换编解码类型','编解码'],
-  ['url-encode','URL','URL 编解码','URL 编码和解码工具，自动识别输入内容','编解码'],
-  ['hex-encode','HEX','HEX 编解码','十六进制编码和解码工具','编解码'],
-  ['html-entity','ENT','HTML 实体编解码','HTML 实体编码和解码','编解码'],
-  ['unicode','U+','Unicode 转义','Unicode 码点转义转换','编解码'],
-  ['ascii','ASC','ASCII 二进制','文本与二进制互转','编解码'],
+  ['universal-encoding','UNI','统一编解码','统一支持 URL、Base、Hex、Unicode、ASCII、二进制、八进制、十进制等格式互转','编解码'],
   ['jwt','JWT','JWT 结构编解码','JWT JSON 结构与 Token 互转，保留 signature 第三段','编解码'],
-  ['char-escape','ESC','字符转义','特殊字符转义与反转义','编解码'],
+  ['char-escape','ESC','特殊字符转义','JSON 字符串场景下的特殊字符转义与反转义','编解码'],
   ['md5','MD5','MD5 哈希','计算 MD5 消息摘要，输出 128-bit 结果（不建议用于安全场景）','哈希算法'],
   ['sha','SHA','SHA 哈希','在 SHA-1 / SHA-256 / SHA-384 / SHA-512 之间切换（SHA-1 不建议）','哈希算法'],
   ['sm3','SM3','SM3 哈希','GB/T 32905-2016 国密 SM3 哈希算法','哈希算法'],
