@@ -25,7 +25,7 @@ import Field from './shared/ToolField.vue'
 import FormatTabs from './shared/FormatTabs.vue'
 import ResultBox from './shared/ResultBox.vue'
 import ToolPageTitle from './shared/ToolPageTitle.vue'
-import { SM4_IV_HINT, SM4_KEY_HEX_LENGTH, SM4_KEY_HINT, formatFromHex, formatFromTextHex, getHexRequirementMessage, isConvertError, isEvenHex, isHexLength, isHexOutput, parseHexInput, randomHex } from './shared/cipher-helpers.js'
+import { SM4_IV_HINT, SM4_KEY_HEX_LENGTH, SM4_KEY_HINT, formatFromHex, formatFromTextHex, getHexRequirementMessage, isConvertError, isEvenHex, isHexLength, isHexOutput, normalizeCipherHexInput, randomHex } from './shared/cipher-helpers.js'
 
 const sm4 = reactive({ mode: 'ecb', plainEncoding: 'utf8', padding: 'pkcs7', key: '0123456789abcdeffedcba9876543210', iv: '00112233445566778899aabbccddeeff', input: '', last: '', lastIsEnc: false, format: 'hex', resultFormat: 'hex' })
 const sm4Output = computed(() => sm4.lastIsEnc ? formatFromHex(sm4.last, sm4.format) : formatFromTextHex(sm4.last, sm4.resultFormat))
@@ -57,7 +57,7 @@ async function runSm4(enc) {
   if (enc && sm4.plainEncoding === 'hex' && !isEvenHex(sm4.input.replace(/\s+/g, ''))) return sm4.last = 'Hex 明文应为偶数位且仅包含 0-9a-f'
   if (enc) sm4.last = await crHeavy.sm4Encrypt(sm4.input, sm4.key, sm4.mode, sm4.iv, { plainEncoding: sm4.plainEncoding, padding: sm4.padding })
   else {
-    const inputText = parseHexInput(sm4.input, sm4.format)
+    const inputText = normalizeCipherHexInput(sm4.input)
     if (isConvertError(inputText)) return sm4.last = inputText
     sm4.last = await crHeavy.sm4Decrypt(inputText, sm4.key, sm4.mode, sm4.iv, { padding: sm4.padding })
   }

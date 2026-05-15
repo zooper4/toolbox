@@ -9,7 +9,7 @@
       <Field v-if="aes.mode === 'cbc' || aes.mode === 'ecb'" label="填充"><select v-model="aes.padding" class="form-input"><option value="pkcs7">PKCS#7</option><option value="none">No Padding</option></select></Field>
       <Field label="密钥" :hint="aesKeyHint"><div class="flex items-center gap-2"><input v-model="aes.key" class="form-input flex-1" placeholder="输入 Hex 密钥" /><button type="button" class="btn btn-outline btn-sm" @click="generateAesKey">生成</button></div></Field>
       <Field v-if="aes.mode !== 'ecb'" label="IV" :hint="aesIvHint"><div class="flex items-center gap-2"><input v-model="aes.iv" class="form-input flex-1" placeholder="输入 Hex IV" /><button type="button" class="btn btn-outline btn-sm" @click="generateAesIv">生成</button></div></Field>
-      <Field label="内容"><textarea v-model="aes.input" class="form-input form-input-xl" placeholder="加密：明文/Hex 字节 | 解密：Base64 密文"></textarea></Field>
+      <Field label="内容"><textarea v-model="aes.input" class="form-input form-input-xl" placeholder="加密：明文/Hex 字节 | 解密：Hex 密文"></textarea></Field>
     </div>
     <div class="btn-group mb-2"><button class="btn btn-primary" @click="runAes(true)">加密</button><button class="btn btn-secondary" @click="runAes(false)">解密</button></div>
     <FormatTabs v-if="aes.lastIsEnc" v-model="aes.format" />
@@ -26,7 +26,7 @@ import Field from './shared/ToolField.vue'
 import FormatTabs from './shared/FormatTabs.vue'
 import ResultBox from './shared/ResultBox.vue'
 import ToolPageTitle from './shared/ToolPageTitle.vue'
-import { AES_IV_HEX_LENGTH, AES_IV_HINT, formatFromBase64, formatFromTextHex, getHexRequirementMessage, isConvertError, isEvenHex, isHexLength, isHexOutput, parseBase64Input, randomHex } from './shared/cipher-helpers.js'
+import { AES_IV_HEX_LENGTH, AES_IV_HINT, formatFromBase64, formatFromTextHex, getHexRequirementMessage, isConvertError, isEvenHex, isHexLength, isHexOutput, parseCipherHexToBase64, randomHex } from './shared/cipher-helpers.js'
 
 const aes = reactive({ mode: 'cbc', keySize: '256', key: '00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff', iv: '00112233445566778899aabbccddeeff', plainEncoding: 'utf8', padding: 'pkcs7', input: '', last: '', lastIsEnc: false, format: 'hex', resultFormat: 'hex' })
 
@@ -67,7 +67,7 @@ async function runAes(enc) {
   if (enc && aes.plainEncoding === 'hex' && !isEvenHex(aes.input.replace(/\s+/g, ''))) return aes.last = 'Hex 明文应为偶数位且仅包含 0-9a-f'
   let inputText = aes.input
   if (!enc) {
-    inputText = parseBase64Input(aes.input, aes.format)
+    inputText = parseCipherHexToBase64(aes.input)
     if (isConvertError(inputText)) return aes.last = inputText
   }
   aes.last = enc

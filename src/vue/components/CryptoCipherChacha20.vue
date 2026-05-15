@@ -23,7 +23,7 @@ import Field from './shared/ToolField.vue'
 import FormatTabs from './shared/FormatTabs.vue'
 import ResultBox from './shared/ResultBox.vue'
 import ToolPageTitle from './shared/ToolPageTitle.vue'
-import { CHACHA_KEY_HEX_LENGTH, CHACHA_KEY_HINT, CHACHA_NONCE_HEX_LENGTH, CHACHA_NONCE_HINT, formatFromHex, formatFromTextHex, getHexRequirementMessage, isConvertError, isEvenHex, isHexLength, isHexOutput, parseHexInput } from './shared/cipher-helpers.js'
+import { CHACHA_KEY_HEX_LENGTH, CHACHA_KEY_HINT, CHACHA_NONCE_HEX_LENGTH, CHACHA_NONCE_HINT, formatFromHex, formatFromTextHex, getHexRequirementMessage, isConvertError, isEvenHex, isHexLength, isHexOutput, normalizeCipherHexInput } from './shared/cipher-helpers.js'
 
 const chacha = reactive({ key: '', nonce: '', counter: '0', plainEncoding: 'utf8', input: '', last: null, lastIsEnc: false, format: 'hex', resultFormat: 'hex' })
 const chachaOutput = computed(() => chacha.lastIsEnc ? formatFromHex(chacha.last?.hex || '', chacha.format) : formatFromTextHex(chacha.last, chacha.resultFormat))
@@ -50,7 +50,7 @@ async function runChachaDecrypt() {
   if (!isHexLength(chacha.key, CHACHA_KEY_HEX_LENGTH)) return chacha.last = getHexRequirementMessage('Key', CHACHA_KEY_HINT)
   if (!isHexLength(chacha.nonce, CHACHA_NONCE_HEX_LENGTH)) return chacha.last = getHexRequirementMessage('Nonce', CHACHA_NONCE_HINT)
   if (!chacha.input) return chacha.last = '请输入密文'
-  const inputText = parseHexInput(chacha.input, chacha.format)
+  const inputText = normalizeCipherHexInput(chacha.input)
   if (isConvertError(inputText)) return chacha.last = inputText
   chacha.last = await crHeavy.chacha20Decrypt(inputText, chacha.key, chacha.nonce, { counter: Number(chacha.counter) || 0 })
   chacha.lastIsEnc = false

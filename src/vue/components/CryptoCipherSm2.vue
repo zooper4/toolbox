@@ -30,7 +30,7 @@ import Field from './shared/ToolField.vue'
 import FormatTabs from './shared/FormatTabs.vue'
 import ResultBox from './shared/ResultBox.vue'
 import ToolPageTitle from './shared/ToolPageTitle.vue'
-import { SM2_PRIVATE_KEY_HEX_LENGTH, SM2_PRIVATE_KEY_HINT, SM2_PUBLIC_KEY_HEX_LENGTH, SM2_PUBLIC_KEY_HINT, formatFromHex, formatFromTextHex, getHexRequirementMessage, isConvertError, isEvenHex, isHexLength, isHexOutput, parseHexInput } from './shared/cipher-helpers.js'
+import { SM2_PRIVATE_KEY_HEX_LENGTH, SM2_PRIVATE_KEY_HINT, SM2_PUBLIC_KEY_HEX_LENGTH, SM2_PUBLIC_KEY_HINT, formatFromHex, formatFromTextHex, getHexRequirementMessage, isConvertError, isEvenHex, isHexLength, isHexOutput, normalizeCipherHexInput } from './shared/cipher-helpers.js'
 
 const sm2 = reactive({ cipherMode: 'c1c3c2', inputEncoding: 'utf8', signatureFormat: 'plain', publicKey: '', privateKey: '', signature: '', input: '', last: '', lastIsEnc: false, format: 'hex', resultFormat: 'hex', loading: false })
 const sm2Output = computed(() => sm2.lastIsEnc ? formatFromHex(sm2.last, sm2.format) : formatFromTextHex(sm2.last, sm2.resultFormat))
@@ -60,7 +60,7 @@ async function runSm2Encrypt() {
 async function runSm2Decrypt() {
   if (!sm2.privateKey || !sm2.input) return sm2.last = '请填写私钥和内容'
   if (!isHexLength(sm2.privateKey, SM2_PRIVATE_KEY_HEX_LENGTH)) return sm2.last = getHexRequirementMessage('私钥', SM2_PRIVATE_KEY_HINT)
-  const inputText = parseHexInput(sm2.input, sm2.format)
+  const inputText = normalizeCipherHexInput(sm2.input)
   if (isConvertError(inputText)) return sm2.last = inputText
   sm2.last = await crHeavy.sm2Decrypt(inputText, sm2.privateKey, { cipherMode: sm2.cipherMode })
   sm2.lastIsEnc = false

@@ -35,6 +35,21 @@ export function isConvertError(value) {
   return typeof value === 'string' && value.startsWith('错误：')
 }
 
+export function normalizeCipherHexInput(value, label = '密文') {
+  const clean = String(value || '').replace(/\s+/g, '')
+  if (!clean) return `错误：请输入${label}`
+  if (clean.length % 2 !== 0 || /[^0-9a-fA-F]/.test(clean)) {
+    return `错误：${label}必须是偶数位 Hex 字符串，仅支持 0-9、a-f`
+  }
+  return clean.toUpperCase()
+}
+
+export function parseCipherHexToBase64(value, label = '密文') {
+  const normalized = normalizeCipherHexInput(value, label)
+  if (isConvertError(normalized)) return normalized
+  return hexToBase64(normalized)
+}
+
 export function isHexLength(value, length) {
   return typeof value === 'string' && new RegExp(`^[0-9a-fA-F]{${length}}$`).test(value)
 }

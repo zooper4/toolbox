@@ -13,7 +13,7 @@
     <Field label="公钥" hint="PEM，长度随位数变化"><textarea v-model="rsa.publicKey" class="form-input form-input-sm" placeholder="点击生成"></textarea></Field>
     <Field label="私钥" hint="PEM，长度随位数变化"><textarea v-model="rsa.privateKey" class="form-input form-input-sm" placeholder="点击生成"></textarea></Field>
     <Field label="签名" hint="Hex 字符串"><textarea v-model="rsa.signature" class="form-input form-input-sm" placeholder="粘贴待验签名"></textarea></Field>
-    <Field label="内容"><textarea v-model="rsa.input" class="form-input form-input-lg" placeholder="加密：明文 | 解密：Base64 密文"></textarea></Field>
+    <Field label="内容"><textarea v-model="rsa.input" class="form-input form-input-lg" placeholder="加密：明文 | 解密：Hex 密文"></textarea></Field>
     <div class="btn-group mb-2"><button class="btn btn-primary" @click="runRsaEncrypt">加密</button><button class="btn btn-secondary" @click="runRsaDecrypt">解密</button></div>
     <div class="btn-group mb-2"><button class="btn btn-primary" @click="runRsaSign">签名</button><button class="btn btn-secondary" @click="runRsaVerify">验签</button></div>
     <FormatTabs v-if="rsa.lastIsEnc" v-model="rsa.format" />
@@ -31,7 +31,7 @@ import Field from './shared/ToolField.vue'
 import FormatTabs from './shared/FormatTabs.vue'
 import ResultBox from './shared/ResultBox.vue'
 import ToolPageTitle from './shared/ToolPageTitle.vue'
-import { formatFromBase64, formatFromTextHex, isConvertError, isEvenHex, isHexOutput, parseBase64Input } from './shared/cipher-helpers.js'
+import { formatFromBase64, formatFromTextHex, isConvertError, isEvenHex, isHexOutput, parseCipherHexToBase64 } from './shared/cipher-helpers.js'
 
 const rsa = reactive({ bits: '2048', encryptScheme: 'oaep-sha256', signScheme: 'pkcs1-sha256', inputEncoding: 'utf8', publicKey: '', privateKey: '', signature: '', input: '', last: '', lastIsEnc: false, format: 'hex', resultFormat: 'hex', loading: false })
 const rsaOutput = computed(() => rsa.lastIsEnc ? formatFromBase64(rsa.last, rsa.format) : formatFromTextHex(rsa.last, rsa.resultFormat))
@@ -66,7 +66,7 @@ async function runRsaEncrypt() {
 async function runRsaDecrypt() {
   if (!rsa.privateKey) return rsa.last = '请生成或粘贴私钥'
   if (!rsa.input) return rsa.last = '请输入密文'
-  const value = parseBase64Input(rsa.input, rsa.format)
+  const value = parseCipherHexToBase64(rsa.input)
   if (isConvertError(value)) return rsa.last = value
   rsa.last = await crHeavy.rsaDecrypt(value, rsa.privateKey, { encryptScheme: rsa.encryptScheme })
   rsa.lastIsEnc = false
