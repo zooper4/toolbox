@@ -3,6 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
+  base: './',
   server: {
     host: '0.0.0.0',
     port: 1024,
