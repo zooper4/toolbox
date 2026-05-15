@@ -647,7 +647,8 @@ function handleScroll() {
 onMounted(() => {
   beginGlobalLoading();
   syncThemeFromStorage();
-  sidebarDesktopCollapsed.value = browserStorage?.getItem('sidebar-desktop-collapsed') === '1';
+  const savedSidebarState = browserStorage?.getItem('sidebar-desktop-collapsed');
+  sidebarDesktopCollapsed.value = savedSidebarState === null ? true : savedSidebarState === '1';
   syncSidebarViewport();
   if (browserHistory && 'scrollRestoration' in browserHistory) {
     browserHistory.scrollRestoration = 'manual';
