@@ -2,7 +2,17 @@
   "name": "tech-toolbox",
   "version": "2.0.0",
   "description": "开发者工具集 — 编码、加密、格式化、转换",
+  "license": "GPL-3.0-only",
+  "homepage": "https://zooper4.github.io/toolbox/",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zooper4/toolbox.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zooper4/toolbox/issues"
+  },
+  "author": "zooper",
   "type": "module",
   "scripts": {
     "dev": "vite",

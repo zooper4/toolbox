@@ -12,7 +12,7 @@
     <header class="site-header">
       <div class="container-fixed site-header-bar">
         <div class="site-brand-block">
-          <a href="#" class="site-brand" @click.prevent="goHome">zooper 的小屋</a>
+          <a href="#" class="site-brand" @click.prevent="goHome">zooper</a>
         </div>
         <div class="header-actions">
           <button class="btn btn-ghost btn-sm header-icon-button" :title="searchOpen ? '关闭搜索' : '搜索 (Ctrl+K)'" @click="openSearch">
@@ -87,7 +87,7 @@
         <div class="site-content">
           <section v-if="currentPage === 'home'">
             <div class="home-intro">
-              <p>简约、可靠的开发实用工具，开箱即用、随用即得</p>
+              <p>简约、可靠的开发实用工具集合，开箱即用</p>
             </div>
 
             <div class="tool-categories">
@@ -129,9 +129,16 @@
     <footer class="site-footer">
       <div class="container-fixed site-footer-inner">
         <p class="site-footer-copy">Designed by <span>zooper</span>@2026</p>
-        <p class="site-footer-note">Inspired by <a href="https://0xf.com/zh" target="_blank" rel="noreferrer" class="site-footer-note-link">0xf.com</a></p>
+        <p class="site-footer-open-source">
+          已在
+          <a href="https://github.com/zooper4/toolbox" target="_blank" rel="noreferrer" class="site-footer-note-link"> GitHub 开源</a>
+          <!-- ，采用
+          <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noreferrer" class="site-footer-note-link">GPL-3.0</a>
+          许可证。 -->
+        </p>
         <!-- <div class="site-footer-links">
-          <a href="https://github.com/zooper4" target="_blank" rel="noreferrer" class="site-footer-link">GitHub</a>
+          <a href="https://github.com/zooper4" target="_blank" rel="noreferrer" class="site-footer-link">GitHub @zooper4</a>
+          <a href="https://github.com/zooper4/toolbox" target="_blank" rel="noreferrer" class="site-footer-link">源码仓库</a>
         </div> -->
       </div>
     </footer>

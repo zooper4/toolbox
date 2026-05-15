@@ -4,11 +4,17 @@
 
 在线地址：<https://zooper4.github.io/toolbox/>
 
+源码仓库：<https://github.com/zooper4/toolbox>
+
+作者 GitHub：<https://github.com/zooper4>
+
+开源协议：GPL-3.0-only
+
 ## 功能概览
 
 - 编解码：统一编解码入口，支持 UTF-8、URL、Base64 / Base64URL / Base32 / Base58、Hex、Quoted-Printable、二进制、八进制、十进制字节、ASCII 码序列、Unicode 转义、HTML 实体互转；并提供 JWT 结构编解码、特殊字符转义等独立工具
 - 哈希算法：MD5、SHA-1 / SHA-256 / SHA-384 / SHA-512、SM3、HMAC
-- 加解密：AES、DES / 3DES、SM4、RSA、SM2、ChaCha20
+- 加解密：AES、DES / 3DES、SM4、RSA、SM2、ChaCha20、HMAC / AES-CMAC 消息认证
 - 数据生成：UUID、密码生成、二维码生成、Lorem Ipsum
 - 数据转换：时间戳转换、时间间隔、颜色转换、JSON / XML / CSV / YAML 转换
 - 格式化：命名格式转换、正则测试、代码格式化、代码压缩
@@ -136,8 +142,12 @@ npm run build
 
 ## License
 
-本项目已以开源仓库形式发布。
+本项目采用 GPL-3.0-only 许可证发布，完整条款见仓库根目录的 LICENSE 文件。
 
-当前仓库尚未提供 `LICENSE` 文件；在未明确许可证前，默认仍视为“保留所有权利”。
+这意味着：
 
-建议尽快在仓库根目录补充标准 `LICENSE` 文件（例如 MIT、Apache-2.0、GPL-3.0），并在 README 顶部同步标注许可证类型，便于社区成员合规使用与贡献。
+- 你可以在 GPL-3.0 约束下使用、复制、修改和分发本项目
+- 如果你分发修改后的版本，通常也需要继续以 GPL-3.0 方式开放对应源码
+- 使用、分发或二次开发前，建议先完整阅读许可证正文，确认与你的场景兼容
+
+项目源码与后续更新会同步发布在 GitHub：<https://github.com/zooper4/toolbox>

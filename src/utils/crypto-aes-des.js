@@ -208,3 +208,75 @@ export async function desDecrypt(cipherB64, key, mode, ivStr, key2, key3, option
     return 'DES 解密失败: ' + error.message
   }
 }
+
+export async function aesCmac(key, text, options = {}) {
+  try {
+    const keyEncoding = options.keyEncoding === 'utf8' ? 'utf8' : 'hex'
+    const inputEncoding = options.inputEncoding === 'hex' ? 'hex' : 'utf8'
+    const keyBytes = normalizeInputBytes(key, keyEncoding)
+    if (![16, 24, 32].includes(keyBytes.length)) {
+      return '错误：AES-CMAC 密钥应为 16/24/32 字节'
+    }
+    const messageBytes = normalizeInputBytes(text, inputEncoding)
+    const subKeys = generateAesCmacSubKeys(keyBytes)
+    const blockCount = messageBytes.length === 0 ? 1 : Math.ceil(messageBytes.length / 16)
+    const complete = messageBytes.length > 0 && messageBytes.length % 16 === 0
+    const lastBlockStart = Math.max(0, (blockCount - 1) * 16)
+    const lastChunk = messageBytes.slice(lastBlockStart)
+    const lastBlock = complete
+      ? xorBlock(lastChunk, subKeys.k1)
+      : xorBlock(padCmacBlock(lastChunk), subKeys.k2)
+
+    let state = new Uint8Array(16)
+    for (let index = 0; index < blockCount - 1; index++) {
+      const block = messageBytes.slice(index * 16, index * 16 + 16)
+      state = aesEcbEncryptBlock(keyBytes, xorBlock(state, block))
+    }
+    const tag = aesEcbEncryptBlock(keyBytes, xorBlock(state, lastBlock))
+    return ab2hex(tag).toUpperCase()
+  } catch (error) {
+    return '错误：' + error.message
+  }
+}
+
+function generateAesCmacSubKeys(keyBytes) {
+  const zeroBlock = new Uint8Array(16)
+  const l = aesEcbEncryptBlock(keyBytes, zeroBlock)
+  const k1 = leftShiftOneBit(l)
+  if (l[0] & 0x80) k1[15] ^= 0x87
+  const k2 = leftShiftOneBit(k1)
+  if (k1[0] & 0x80) k2[15] ^= 0x87
+  return { k1, k2 }
+}
+
+function aesEcbEncryptBlock(keyBytes, blockBytes) {
+  const cipher = forge.cipher.createCipher('AES-ECB', bytesToBinaryString(keyBytes))
+  cipher.start({})
+  cipher.update(forge.util.createBuffer(bytesToBinaryString(blockBytes)))
+  const ok = cipher.finish((blockSize, input) => input.length() % blockSize === 0)
+  if (!ok) throw new Error('AES-CMAC 分组加密失败')
+  return Uint8Array.from(cipher.output.getBytes(), (char) => char.charCodeAt(0))
+}
+
+function leftShiftOneBit(bytes) {
+  const output = new Uint8Array(bytes.length)
+  let carry = 0
+  for (let index = bytes.length - 1; index >= 0; index--) {
+    output[index] = ((bytes[index] << 1) & 0xFF) | carry
+    carry = (bytes[index] & 0x80) ? 1 : 0
+  }
+  return output
+}
+
+function xorBlock(left, right) {
+  const output = new Uint8Array(16)
+  for (let index = 0; index < 16; index++) output[index] = (left[index] || 0) ^ (right[index] || 0)
+  return output
+}
+
+function padCmacBlock(bytes) {
+  const output = new Uint8Array(16)
+  output.set(bytes)
+  output[bytes.length] = 0x80
+  return output
+}

@@ -104,14 +104,16 @@ export function sm2Verify(text, signature, publicKey, options = {}) {
   }
 }
 
-export async function hmac(algorithm, key, text) {
+export async function hmac(algorithm, key, text, options = {}) {
   if (algorithm.toLowerCase() !== 'sm3') return null
-  return hmacSm3(key, text)
+  return hmacSm3(key, text, options)
 }
 
-function hmacSm3(key, text) {
+function hmacSm3(key, text, options = {}) {
   const blockSize = 64
-  let keyBytes = typeof key === 'string' ? normalizeFlexibleBytes(key) : key
+  const keyEncoding = options.keyEncoding === 'utf8' ? 'utf8' : 'hex'
+  const inputEncoding = options.inputEncoding === 'hex' ? 'hex' : 'utf8'
+  let keyBytes = typeof key === 'string' ? normalizeInputBytes(key, keyEncoding) : key
   if (keyBytes.length > blockSize) {
     keyBytes = hex2ab(smCrypto.sm3(keyBytes))
   }
@@ -119,7 +121,7 @@ function hmacSm3(key, text) {
   kPad.set(new Uint8Array(keyBytes))
   const iPad = kPad.map((b) => b ^ 0x36)
   const oPad = kPad.map((b) => b ^ 0x5C)
-  const textBytes = str2ab(text)
+  const textBytes = normalizeInputBytes(text, inputEncoding)
   const innerInput = new Uint8Array(blockSize + textBytes.length)
   innerInput.set(iPad)
   innerInput.set(textBytes, blockSize)
@@ -129,11 +131,4 @@ function hmacSm3(key, text) {
   outerInput.set(oPad)
   outerInput.set(innerHashBytes, blockSize)
   return smCrypto.sm3(outerInput)
-}
-
-function normalizeFlexibleBytes(input) {
-  if (typeof input === 'string' && input.length >= 16 && input.length % 2 === 0 && /^[0-9a-fA-F]+$/.test(input)) {
-    return hex2ab(input)
-  }
-  return str2ab(input || '')
 }

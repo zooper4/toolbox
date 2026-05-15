@@ -6,7 +6,7 @@ export const TOOLS = [
   ['md5','MD5','MD5 哈希','计算 MD5 消息摘要，输出 128-bit 结果（不建议用于安全场景）','哈希算法'],
   ['sha','SHA','SHA 哈希','在 SHA-1 / SHA-256 / SHA-384 / SHA-512 之间切换（SHA-1 不建议）','哈希算法'],
   ['sm3','SM3','SM3 哈希','GB/T 32905-2016 国密 SM3 哈希算法','哈希算法'],
-  ['hmac','HMC','HMAC 签名','HMAC 消息认证码，确保完整性和真实性','加解密'],
+  ['hmac','MAC','MAC 认证','支持 HMAC-SHA / HMAC-SM3 / AES-CMAC 的消息认证与校验','加解密'],
   ['aes','AES','AES 加解密','对称加密 AES，支持 CBC/GCM/CTR 模式','加解密'],
   ['des','DES','DES/3DES','DES 对称加解密（高风险，仅作演示）','加解密'],
   ['sm4','SM4','SM4 加解密','GB/T 32907-2016 国密 SM4 对称加密','加解密'],

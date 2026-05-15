@@ -5,7 +5,6 @@ import {
   bytesToBinaryString,
   forge,
   formatPem,
-  getForgeMessageDigest,
   getRsaEncryptionSchemeOptions,
   getRsaKeyMaterial,
   getRsaMaxPlaintextBytes,
@@ -160,61 +159,4 @@ function hexToBytes(hex) {
   const bytes = new Uint8Array(clean.length / 2)
   for (let index = 0; index < clean.length; index += 2) bytes[index / 2] = parseInt(clean.substr(index, 2), 16)
   return bytes
-}
-
-export async function hash(algorithm, text) {
-  const algoLower = algorithm.toLowerCase()
-  if (algoLower === 'md5') return md5(text)
-  const algoMap = { sha1: 'SHA-1', sha256: 'SHA-256', sha384: 'SHA-384', sha512: 'SHA-512' }
-  const name = algoMap[algoLower]
-  if (!name) return '错误：不支持的哈希算法'
-  const subtle = getWebCryptoSubtle()
-  if (subtle) {
-    const buf = await subtle.digest(name, new TextEncoder().encode(text))
-    return ab2hex(buf)
-  }
-  try {
-    const digest = getForgeMessageDigest(algoLower)
-    digest.update(text, 'utf8')
-    return digest.digest().toHex()
-  } catch (error) {
-    return '错误：' + error.message
-  }
-}
-
-export async function hmac(algorithm, key, text) {
-  const algoLower = algorithm.toLowerCase()
-  if (algoLower === 'md5') return hmacMd5(key, text)
-  const algoMap = { sha256: 'SHA-256', sha384: 'SHA-384', sha512: 'SHA-512', sha1: 'SHA-1' }
-  const name = algoMap[algoLower]
-  if (!name) return null
-  const subtle = getWebCryptoSubtle()
-  if (subtle) {
-    const keyData = normalizeInputBytes(key)
-    const algo = { name: 'HMAC', hash: name }
-    const cryptoKey = await subtle.importKey('raw', keyData, algo, false, ['sign'])
-    const sig = await subtle.sign('HMAC', cryptoKey, new TextEncoder().encode(text))
-    return ab2hex(sig)
-  }
-  try {
-    const hmac = forge.hmac.create()
-    hmac.start(algorithm.toLowerCase(), bytesToBinaryString(normalizeInputBytes(key)))
-    hmac.update(text, 'utf8')
-    return hmac.digest().toHex()
-  } catch (error) {
-    return '错误：' + error.message
-  }
-}
-
-function md5(s) {
-  const digest = forge.md.md5.create()
-  digest.update(s, 'utf8')
-  return digest.digest().toHex()
-}
-
-function hmacMd5(key, text) {
-  const hmac = forge.hmac.create()
-  hmac.start('md5', bytesToBinaryString(normalizeInputBytes(key)))
-  hmac.update(text, 'utf8')
-  return hmac.digest().toHex()
 }
