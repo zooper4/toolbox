@@ -184,9 +184,12 @@ export function getRsaKeyMaterial(keyText, type) {
     const derBase64 = pemToBase64Body(pem)
     return { pem, derBytes: base64ToBuf(derBase64) }
   }
-  const derBase64 = String(keyText || '').replace(/\s+/g, '')
+  const normalized = String(keyText || '').replace(/\s+/g, '')
+  const isHexDer = normalized.length > 0 && normalized.length % 2 === 0 && /^[0-9a-fA-F]+$/.test(normalized)
+  const derBytes = isHexDer ? hex2ab(normalized) : base64ToBuf(normalized)
+  const derBase64 = isHexDer ? bufToBase64(derBytes) : normalized
   const pemType = type === 'public' ? 'PUBLIC KEY' : 'PRIVATE KEY'
-  return { pem: formatPem(pemType, derBase64), derBytes: base64ToBuf(derBase64) }
+  return { pem: formatPem(pemType, derBase64), derBytes }
 }
 
 export function getRsaKeyByteLength(keyText, type) {

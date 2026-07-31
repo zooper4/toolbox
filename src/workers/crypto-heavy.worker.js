@@ -2,6 +2,7 @@ import {
   rsaDecrypt,
   rsaEncrypt,
   rsaGenerateKey,
+  rsaParsePrivateKey,
   rsaSign,
   rsaVerify,
 } from '../utils/crypto-rsa.js'
@@ -26,6 +27,7 @@ const handlers = {
   rsaDecrypt,
   rsaSign,
   rsaVerify,
+  rsaParsePrivateKey,
   sm2GenerateKey,
   sm2Encrypt,
   sm2Decrypt,

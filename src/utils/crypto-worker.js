@@ -48,6 +48,7 @@ export function rsaEncrypt(text, publicKey, options = {}) { return runCryptoTask
 export function rsaDecrypt(cipherText, privateKey, options = {}) { return runCryptoTask('rsaDecrypt', [cipherText, privateKey, options]) }
 export function rsaSign(text, privateKey, options = {}) { return runCryptoTask('rsaSign', [text, privateKey, options]) }
 export function rsaVerify(text, signature, publicKey, options = {}) { return runCryptoTask('rsaVerify', [text, signature, publicKey, options]) }
+export function rsaParsePrivateKey(privateKey, options = {}) { return runCryptoTask('rsaParsePrivateKey', [privateKey, options]) }
 export function sm2GenerateKey() { return runCryptoTask('sm2GenerateKey', []) }
 export function sm2Encrypt(text, publicKey, options = {}) { return runCryptoTask('sm2Encrypt', [text, publicKey, options]) }
 export function sm2Decrypt(cipherText, privateKey, options = {}) { return runCryptoTask('sm2Decrypt', [cipherText, privateKey, options]) }
