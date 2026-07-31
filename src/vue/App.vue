@@ -269,6 +269,7 @@ const TOOL_COMPONENTS = {
   uuid: { component: GeneratorTools, props: { toolId: 'uuid' } },
   password: { component: GeneratorTools, props: { toolId: 'password' } },
   qrcode: { component: GeneratorTools, props: { toolId: 'qrcode' } },
+  qrscan: { component: GeneratorTools, props: { toolId: 'qrscan' } },
   lorem: { component: GeneratorTools, props: { toolId: 'lorem' } },
   hmac: { component: CryptoDigestTools, props: { toolId: 'hmac' } },
   aes: { component: CryptoCipherTools, props: { toolId: 'aes' } },

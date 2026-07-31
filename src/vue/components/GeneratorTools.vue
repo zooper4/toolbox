@@ -31,6 +31,7 @@ import { generateLoremIpsum } from '../../utils/generator-tools.js'
 import GeneratorUUID from './GeneratorUUID.vue'
 import GeneratorPassword from './GeneratorPassword.vue'
 import GeneratorQRCode from './GeneratorQRCode.vue'
+import GeneratorQRScan from './GeneratorQRScan.vue'
 import ResultBox from './shared/ResultBox.vue'
 import ToolPageTitle from './shared/ToolPageTitle.vue'
 
@@ -42,6 +43,7 @@ const delegated = {
   uuid: GeneratorUUID,
   password: GeneratorPassword,
   qrcode: GeneratorQRCode,
+  qrscan: GeneratorQRScan,
 }
 
 const delegatedComponent = computed(() => delegated[props.toolId] || null)
