@@ -186,6 +186,8 @@ const CryptoDigestTools = defineAsyncComponent(() => import('./components/Crypto
 const CryptoCipherTools = defineAsyncComponent(() => import('./components/CryptoCipherTools.vue'));
 const UtilityBasicTools = defineAsyncComponent(() => import('./components/UtilityBasicTools.vue'));
 const UtilityAdvancedTools = defineAsyncComponent(() => import('./components/UtilityAdvancedTools.vue'));
+const CtfClassicalTools = defineAsyncComponent(() => import('./components/CtfClassicalTools.vue'));
+const CtfClassicalAdvanced = defineAsyncComponent(() => import('./components/CtfClassicalAdvanced.vue'));
 
 const publicAssetBase = import.meta.env.BASE_URL || '/';
 
@@ -231,7 +233,7 @@ let globalLoadingStart = 0;
 let globalLoadingShowTimer = null;
 let globalLoadingHideTimer = null;
 
-const HOMEPAGE_CATEGORY_ORDER = ['编解码', '哈希算法', '加解密', '数据生成', '数据转换', '格式化', '数据分析', '图像'];
+const HOMEPAGE_CATEGORY_ORDER = ['编解码', '哈希算法', '加解密', '数据生成', '数据转换', '格式化', '数据分析', '图像', 'CTF 工具'];
 
 const CATEGORY_ICONS = {
   编解码: getPublicAssetUrl('images/icons/menu-binary.svg'),
@@ -242,6 +244,7 @@ const CATEGORY_ICONS = {
   格式化: getPublicAssetUrl('images/icons/menu-code-xml.svg'),
   数据分析: getPublicAssetUrl('images/icons/menu-search.svg'),
   图像: getPublicAssetUrl('images/icons/menu-image.svg'),
+  'CTF 工具': getPublicAssetUrl('images/icons/menu-ctf.svg'),
   其他: getPublicAssetUrl('images/icons/menu-code-xml.svg'),
 };
 
@@ -292,6 +295,18 @@ const TOOL_COMPONENTS = {
   'ua-parser': { component: UtilityAdvancedTools, props: { toolId: 'ua-parser' } },
   'key-event': { component: UtilityAdvancedTools, props: { toolId: 'key-event' } },
   'svg-optimize': { component: UtilityAdvancedTools, props: { toolId: 'svg-optimize' } },
+  // CTF 工具
+  caesar: { component: CtfClassicalTools, props: { toolId: 'caesar' } },
+  vigenere: { component: CtfClassicalTools, props: { toolId: 'vigenere' } },
+  'rail-fence': { component: CtfClassicalTools, props: { toolId: 'rail-fence' } },
+  morse: { component: CtfClassicalTools, props: { toolId: 'morse' } },
+  affine: { component: CtfClassicalTools, props: { toolId: 'affine' } },
+  'freq-analysis': { component: CtfClassicalTools, props: { toolId: 'freq-analysis' } },
+  bacon: { component: CtfClassicalAdvanced, props: { toolId: 'bacon' } },
+  playfair: { component: CtfClassicalAdvanced, props: { toolId: 'playfair' } },
+  adfgvx: { component: CtfClassicalAdvanced, props: { toolId: 'adfgvx' } },
+  pigpen: { component: CtfClassicalAdvanced, props: { toolId: 'pigpen' } },
+  brainfuck: { component: CtfClassicalAdvanced, props: { toolId: 'brainfuck' } },
 };
 
 const filteredTools = computed(() => {

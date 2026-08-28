@@ -30,5 +30,17 @@ export const TOOLS = [
   ['text-stats','CNT','文本统计','统计分析文本中各类字符的数量','数据分析'],
   ['ua-parser','UA','UA 解析','解析 User-Agent 字符串，识别浏览器和系统','数据分析'],
   ['key-event','KEY','键盘事件','实时查看 KeyboardEvent 的 key/code 等属性','数据分析'],
+  // ---- CTF 工具：古典密码 ----
+  ['caesar','CAE','古典 · 凯撒密码','凯撒移位密码：加密/解密/ROT13/ROT47/全量爆破','CTF 工具'],
+  ['vigenere','VIG','古典 · 维吉尼亚','多表替换密码：加密/解密/自动破解（Kasiski+重合指数）','CTF 工具'],
+  ['rail-fence','RAI','古典 · 栅栏密码','Rail Fence 锯齿形置换密码，含栏数爆破','CTF 工具'],
+  ['morse','MOR','古典 · 摩斯电码','摩斯电码编解码，支持字母/数字/标点','CTF 工具'],
+  ['affine','AFF','古典 · 仿射密码','y=(ax+b) mod 26 仿射密码，含全量爆破','CTF 工具'],
+  ['bacon','BAC','古典 · 培根密码','5 位 A/B 序列编码，支持 24/26 字母变体','CTF 工具'],
+  ['playfair','PLA','古典 · Playfair','双字母替换密码，5×5 矩阵（I/J 合并）','CTF 工具'],
+  ['adfgvx','ADF','古典 · ADFGVX','Polybius 6×6 方阵 + 列置换','CTF 工具'],
+  ['pigpen','PIG','古典 · 猪圈密码','猪圈符号生成与对照表','CTF 工具'],
+  ['brainfuck','BFK','古典 · Brainfuck','Brainfuck 解释器与 Ook! 互转','CTF 工具'],
+  ['freq-analysis','FRE','古典 · 词频分析','字母频率统计与英文标准对比，辅助密码分析','CTF 工具'],
   // ['svg-optimize','SVG','SVG 优化','清理并压缩 SVG 文件，移除冗余元素','图像'],
 ];
