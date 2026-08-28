@@ -57,6 +57,13 @@ export function englishScore(text) {
     if (TOP_BIGRAMS.has(lower.slice(i, i + 2))) bigramHits++;
   }
   score -= bigramHits * 2;
+  // 控制字符惩罚（爆破场景区分度）
+  let controlCount = 0;
+  for (const ch of lower) {
+    const code = ch.charCodeAt(0);
+    if (code < 32 && code !== 9 && code !== 10 && code !== 13) controlCount++;
+  }
+  score += controlCount * 50;
   // 字母占比奖励
   score += Math.max(0, (1 - letters / Math.max(1, text.length)) * 200);
   return score;

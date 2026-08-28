@@ -188,6 +188,8 @@ const UtilityBasicTools = defineAsyncComponent(() => import('./components/Utilit
 const UtilityAdvancedTools = defineAsyncComponent(() => import('./components/UtilityAdvancedTools.vue'));
 const CtfClassicalTools = defineAsyncComponent(() => import('./components/CtfClassicalTools.vue'));
 const CtfClassicalAdvanced = defineAsyncComponent(() => import('./components/CtfClassicalAdvanced.vue'));
+const CtfXorTools = defineAsyncComponent(() => import('./components/CtfXorTools.vue'));
+const CtfRsaTools = defineAsyncComponent(() => import('./components/CtfRsaTools.vue'));
 
 const publicAssetBase = import.meta.env.BASE_URL || '/';
 
@@ -307,6 +309,15 @@ const TOOL_COMPONENTS = {
   adfgvx: { component: CtfClassicalAdvanced, props: { toolId: 'adfgvx' } },
   pigpen: { component: CtfClassicalAdvanced, props: { toolId: 'pigpen' } },
   brainfuck: { component: CtfClassicalAdvanced, props: { toolId: 'brainfuck' } },
+  'xor-single': { component: CtfXorTools, props: { toolId: 'xor-single' } },
+  'xor-repeat': { component: CtfXorTools, props: { toolId: 'xor-repeat' } },
+  'xor-cipher': { component: CtfXorTools, props: { toolId: 'xor-cipher' } },
+  'rsa-basic': { component: CtfRsaTools, props: { toolId: 'rsa-basic' } },
+  'rsa-factor': { component: CtfRsaTools, props: { toolId: 'rsa-factor' } },
+  'rsa-common': { component: CtfRsaTools, props: { toolId: 'rsa-common' } },
+  'rsa-broadcast': { component: CtfRsaTools, props: { toolId: 'rsa-broadcast' } },
+  'rsa-wiener': { component: CtfRsaTools, props: { toolId: 'rsa-wiener' } },
+  'rsa-known-d': { component: CtfRsaTools, props: { toolId: 'rsa-known-d' } },
 };
 
 const filteredTools = computed(() => {
